@@ -37,8 +37,9 @@ const VehicleDetail: React.FC = ({}) => {
         const imageObject = {id:null,data:result.base64String!,format:result.format};
         setImage(imageObject)
         present({message:'Sauvegarde de la photo en cours'})
-        await saveImage(vehicle as Vehicle,imageObject);
-        dismiss();
+        saveImage(vehicle as Vehicle,imageObject).then(() => {
+            dismiss();
+        });
         console.log("saved");
     }
     return (
