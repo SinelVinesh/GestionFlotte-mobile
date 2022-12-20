@@ -1,4 +1,4 @@
-import { IonBackButton, IonButton, IonButtons, IonCard, IonCardContent, IonCardHeader,IonCardTitle, IonCol, IonContent, IonGrid, IonHeader, IonPage, IonRow, IonTitle, IonToolbar, useIonViewWillEnter } from "@ionic/react"
+import { IonBackButton, IonButton, IonButtons, IonCard, IonCardContent, IonCardHeader,IonCardTitle, IonCol, IonContent, IonGrid, IonHeader, IonPage, IonRow, IonTitle, IonToolbar, useIonLoading, useIonViewWillEnter } from "@ionic/react"
 import React, { useState } from "react"
 import { Redirect,useParams } from "react-router";
 import { useAppSelector } from "../../../app/hooks";
@@ -13,8 +13,10 @@ import { Vehicle } from "../../../models/Vehicle";
 const VehicleDetail: React.FC = ({}) => {
     const user = useAppSelector(selectUser)
     const vehicles = useAppSelector(selectPlanes);
+    const [present,dismiss] = useIonLoading();
     const [image,setImage] = useState<Image | undefined>(undefined);
-    const params:any = useParams();
+    const params:any = useParams()
+
     const id = params.id;
     let vehicle = vehicles?.find((vehicle) => vehicle.id == id)
     useIonViewWillEnter(()=>{
@@ -32,9 +34,12 @@ const VehicleDetail: React.FC = ({}) => {
             allowEditing: true,
             resultType: CameraResultType.Base64
         })
-        const imageObject = {id:0,data:result.base64String!,format:result.format};
+        const imageObject = {id:null,data:result.base64String!,format:result.format};
         setImage(imageObject)
+        present({message:'Sauvegarde de la photo en cours'})
         await saveImage(vehicle as Vehicle,imageObject);
+        dismiss();
+        console.log("saved");
     }
     return (
         <IonPage id="vehicle-detail-page">
@@ -43,7 +48,7 @@ const VehicleDetail: React.FC = ({}) => {
                 <IonButtons slot="start">
                     <IonBackButton defaultHref="/tabs/vehicles"></IonBackButton>
                 </IonButtons>
-                <IonTitle>Détail du véhicule #{id}</IonTitle>
+                <IonTitle>Détail de l'avion #{id}</IonTitle>
             </IonToolbar>
             </IonHeader>
             <IonContent>
@@ -68,7 +73,7 @@ const VehicleDetail: React.FC = ({}) => {
                                 </IonRow>
                                 <IonRow>
                                     <IonCol>
-                                        <strong>Date d'expiration de l'assurance: </strong> 2023-09-13
+                                        <strong>Date d'expiration de l'assurance: </strong> {`${vehicle?.currentInsurance.end!}`}
                                     </IonCol>
                                 </IonRow>
                                 <IonRow>

@@ -9,10 +9,11 @@ interface VehicleListProps {
 
 const VehicleList: React.FC<VehicleListProps> = ({vehicles}) => {
     return (
+
         <IonList>
             <IonItemGroup>
                 <IonItemDivider>
-                    <IonLabel>Liste des véhicules</IonLabel>
+                    <IonLabel>Liste des avions</IonLabel>
                 </IonItemDivider>
                 {vehicles.map((element) => (
                     <VehicleListItem vehicle={element}/>

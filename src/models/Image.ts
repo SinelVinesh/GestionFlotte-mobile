@@ -1,5 +1,5 @@
 export interface Image {
-    id: number,
+    id: number | null,
     data: string,
     format: string
 }

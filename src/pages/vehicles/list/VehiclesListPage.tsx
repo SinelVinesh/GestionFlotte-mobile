@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 
-import { IonToolbar, IonContent, IonPage, IonButtons, IonTitle, IonMenuButton, IonSegment, IonSegmentButton, IonButton, IonIcon, IonSearchbar, IonRefresher, IonRefresherContent, IonToast, IonModal, IonHeader, getConfig, IonLoading, useIonViewWillEnter } from '@ionic/react';
+import { IonToolbar, IonContent, IonPage, IonButtons, IonTitle, IonMenuButton, IonSegment, IonSegmentButton, IonButton, IonIcon, IonSearchbar, IonRefresher, IonRefresherContent, IonToast, IonModal, IonHeader, getConfig, IonLoading, useIonViewWillEnter, IonRow, IonCol, IonSelect, IonSelectOption, IonLabel, IonItem } from '@ionic/react';
 import { options, search } from 'ionicons/icons';
 
 import './VehiclesListPage.scss'
@@ -16,8 +16,10 @@ import { useAppSelector } from '../../../app/hooks';
 const VehicleListPage: React.FC = () => {
   const dispatch = useDispatch();
   const vehicles = useAppSelector(selectPlanes)
+  const [filteredVehicles, setFilteredVehicles] = useState<Vehicle[] | undefined>(undefined)
   const [showSearchbar, setShowSearchbar] = useState<boolean>(false);
   const [showFilterModal, setShowFilterModal] = useState(false);
+  const [filter,setFilter] = useState(-1);
   const [loading, setLoading] = useState(true);
   const ionRefresherRef = useRef<HTMLIonRefresherElement>(null);
   const [showCompleteToast, setShowCompleteToast] = useState(false);
@@ -25,10 +27,10 @@ const VehicleListPage: React.FC = () => {
   const pageRef = useRef<HTMLElement>(null);
 
   useIonViewWillEnter(() => {
-    if(!vehicles) {
+    if(!filteredVehicles) {
       getVehicles().then((data) => {
-      
         dispatch(setPlanes(data));
+        setFilteredVehicles(data)
         setLoading(false);
       });
     } else {
@@ -40,6 +42,7 @@ const VehicleListPage: React.FC = () => {
   const doRefresh = () => {
     getVehicles().then((data) => {
       dispatch(setPlanes(data));
+      setFilteredVehicles(vehicles!.slice())
       setLoading(false);
     });
     setTimeout(() => {
@@ -47,6 +50,26 @@ const VehicleListPage: React.FC = () => {
       setShowCompleteToast(true);
     }, 2500)
   };
+
+  const filterVehicles = (month:number) => {
+    setFilter(month);
+    setFilteredVehicles(vehicles?.filter((vehicle) => {
+      if(month == -1) {
+        return true;
+      }
+      const currentDate = new Date();
+      const vehicleDate = new Date(vehicle.currentInsurance.end);
+      const currentYear = currentDate.getFullYear();
+      const vehicleYear = vehicleDate.getFullYear();
+      const currentMonth = currentDate.getMonth();
+      const vehicleMonth = vehicleDate.getMonth();
+      const currentDay = currentDate.getDate();
+      const vehicleDay = vehicleDate.getDate();
+      const yearDiff = vehicleYear - currentYear;
+      const monthDiff = vehicleMonth - currentMonth;
+      return (yearDiff === 0 && monthDiff <= month) || (yearDiff === 1 && (monthDiff+12) <= month)
+    }))
+  }
 
   return (
     <IonPage ref={pageRef} id="schedule-page">
@@ -58,21 +81,8 @@ const VehicleListPage: React.FC = () => {
             </IonButtons>
           }
           {!ios && !showSearchbar &&
-            <IonTitle>Vehicules</IonTitle>
+            <IonTitle>Avions</IonTitle>
           }
-
-          <IonButtons slot="end">
-            {!ios && !showSearchbar &&
-              <IonButton onClick={() => setShowSearchbar(true)}>
-                <IonIcon slot="icon-only" icon={search}></IonIcon>
-              </IonButton>
-            }
-            {!showSearchbar &&
-              <IonButton onClick={() => setShowFilterModal(true)}>
-                {mode === 'ios' ? 'Filter' : <IonIcon icon={options} slot="icon-only" />}
-              </IonButton>
-            }
-          </IonButtons>
         </IonToolbar>
       </IonHeader>
 
@@ -80,7 +90,7 @@ const VehicleListPage: React.FC = () => {
         
         <IonHeader collapse="condense">
           <IonToolbar>
-            <IonTitle size="large">Vehicules</IonTitle>
+            <IonTitle size="large">Avions</IonTitle>
           </IonToolbar>
         </IonHeader>
 
@@ -97,12 +107,24 @@ const VehicleListPage: React.FC = () => {
         { loading &&
           <h1>Chargement...</h1>
         }
-        {/* { error &&
-          <h1>Une erreur est survenue : {error?.message}</h1>
-        } */}
-        { vehicles &&
+        {
+          filteredVehicles &&
+          <IonRow>
+            <IonCol>
+              <IonItem>
+                <IonLabel>Avions dont l'assurance expire après</IonLabel>
+                <IonSelect value={filter} onIonChange={ e=> filterVehicles(e.detail.value!)}>
+                  <IonSelectOption value="-1">--Tout afficher--</IonSelectOption>
+                  <IonSelectOption value="1">1 mois</IonSelectOption>
+                  <IonSelectOption value="3">3 mois</IonSelectOption>
+                </IonSelect>
+              </IonItem>
+            </IonCol>
+          </IonRow>
+        }
+        { filteredVehicles &&
           <VehicleList
-            vehicles={vehicles!}
+            vehicles={filteredVehicles!}
           />
         }
       </IonContent>

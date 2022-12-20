@@ -10,8 +10,9 @@ const VehiclesListItem: React.FC<VehicleListItemProps> = ({vehicle}) => {
     return (
         <IonItem routerLink={`/tabs/vehicles/${vehicle.id}`}>
             <IonLabel>
-                <h3>Vehicule#{vehicle.id}</h3>
+                <h3>Avion#{vehicle.id}</h3>
                 <p><strong>Immatriculation: </strong>{vehicle.licensePlate}</p>
+                <p><strong>Expiration de l'assurance: </strong>{`${vehicle.currentInsurance.end}`}</p>
             </IonLabel>
         </IonItem>
     )

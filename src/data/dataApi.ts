@@ -5,7 +5,9 @@ import { User } from '../models/User';
 import axios from 'axios';
 
 // data urls
-const host = "gestionflotte-production.up.railway.app"
+const host = 
+"https://gestionflotte-production-0361.up.railway.app/"
+// "http://localhost:8080/"
 const vehiclesUrl = host + "vehicles";
 const loginUrl = host + "login";
 
@@ -30,7 +32,8 @@ export const saveImage = async(vehicle: Vehicle, image:Image) => {
     id:vehicle.id,
     licensePlate: vehicle.licensePlate,
     kilometrages:vehicle.kilometrages,
-    image:image
+    image:image,
+    currentInsurance: vehicle.currentInsurance
   }
   const uploadImageUrl = vehiclesUrl + `/${vehicleData.id}/image`;
   return axios.post(uploadImageUrl,vehicleData)

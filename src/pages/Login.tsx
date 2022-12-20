@@ -110,9 +110,7 @@ const Login: React.FC<LoginProps> = ({history}) => {
             <IonCol>
               <IonButton type="submit" expand="block">Login</IonButton>
             </IonCol>
-            <IonCol>
-              <IonButton routerLink="/signup" color="light" expand="block">Signup</IonButton>
-            </IonCol>
+          
           </IonRow>
         </form>
 
