@@ -20,7 +20,8 @@ const Login: React.FC<LoginProps> = ({history}) => {
   const [passwordError, setPasswordError] = useState(false);
   const [showLoginToast, setShowLoginToast] = useState(false);
   const [loginResult,setLoginResult] = useState<"error"|"succes">("error");
-
+  setUsername("Jean");
+  setPassword("123")
   const login = async (e: React.FormEvent) => {
     e.preventDefault();
     setFormSubmitted(true);
@@ -82,7 +83,7 @@ const Login: React.FC<LoginProps> = ({history}) => {
           <IonList>
             <IonItem>
               <IonLabel position="stacked" color="primary">Username</IonLabel>
-              <IonInput name="username" type="text" value={username ?? "Jean"} spellCheck={false} autocapitalize="off" onIonChange={e => setUsername(e.detail.value!)}
+              <IonInput name="username" type="text" value={username} spellCheck={false} autocapitalize="off" onIonChange={e => setUsername(e.detail.value!)}
                 required>
               </IonInput>
             </IonItem>
@@ -95,7 +96,7 @@ const Login: React.FC<LoginProps> = ({history}) => {
 
             <IonItem>
               <IonLabel position="stacked" color="primary">Password</IonLabel>
-              <IonInput name="password" type="password" value={password ?? "123"} onIonChange={e => setPassword(e.detail.value!)}>
+              <IonInput name="password" type="password" value={password} onIonChange={e => setPassword(e.detail.value!)}>
               </IonInput>
             </IonItem>
 
