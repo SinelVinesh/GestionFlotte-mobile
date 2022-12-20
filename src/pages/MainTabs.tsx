@@ -17,9 +17,7 @@ interface Button {
 }
 
 const route = {
-  loggedInButtons: [
-    { tab:'insurance',title: 'Assurance', path:'/tabs/insurance', icon: documentTextOutline},
-  ]
+  loggedInButtons: []
 }
 
 const MainTabs: React.FC<MainTabsProps> = () => {

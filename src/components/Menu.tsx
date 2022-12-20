@@ -14,7 +14,6 @@ const routes = {
     { title: 'Avions', path: '/tabs/vehicles', icon: airplaneOutline },
   ],
   loggedInPages: [
-    { title: 'Assurance', path:'/tabs/insurance', icon: documentTextOutline},
     { title: 'Logout', path: '/logout', icon: logOut }
   ],
   loggedOutPages: [
