@@ -41,14 +41,12 @@ const VehicleListPage: React.FC = () => {
   
   const doRefresh = () => {
     getVehicles().then((data) => {
+      ionRefresherRef.current!.complete();
+      setShowCompleteToast(true);
       dispatch(setPlanes(data));
       setFilteredVehicles(vehicles!.slice())
       setLoading(false);
     });
-    setTimeout(() => {
-      ionRefresherRef.current!.complete();
-      setShowCompleteToast(true);
-    }, 2500)
   };
 
   const filterVehicles = (month:number) => {
@@ -112,7 +110,7 @@ const VehicleListPage: React.FC = () => {
           <IonRow>
             <IonCol>
               <IonItem>
-                <IonLabel>Avions dont l'assurance expire après</IonLabel>
+                <IonLabel>Véhicules dont l'assurance expire après</IonLabel>
                 <IonSelect value={filter} onIonChange={ e=> filterVehicles(e.detail.value!)}>
                   <IonSelectOption value="-1">--Tout afficher--</IonSelectOption>
                   <IonSelectOption value="1">1 mois</IonSelectOption>
