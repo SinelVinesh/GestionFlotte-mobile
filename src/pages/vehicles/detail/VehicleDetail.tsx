@@ -39,8 +39,8 @@ const VehicleDetail: React.FC = ({}) => {
         present({message:'Sauvegarde de la photo en cours'})
         saveImage(vehicle as Vehicle,imageObject).then(() => {
             dismiss();
+            console.log("saved");
         });
-        console.log("saved");
     }
     return (
         <IonPage id="vehicle-detail-page">
