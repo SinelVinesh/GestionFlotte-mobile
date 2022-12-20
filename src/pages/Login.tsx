@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { IonHeader, IonToolbar, IonTitle, IonContent, IonPage, IonButtons, IonMenuButton, IonRow, IonCol, IonButton, IonList, IonItem, IonLabel, IonInput, IonText, IonToast } from '@ionic/react';
+import { IonHeader, IonToolbar, IonTitle, IonContent, IonPage, IonButtons, IonMenuButton, IonRow, IonCol, IonButton, IonList, IonItem, IonLabel, IonInput, IonText, IonToast, useIonViewWillEnter } from '@ionic/react';
 import './Login.scss';
 import { RouteComponentProps } from 'react-router';
 import { userLogin } from '../data/dataApi';
@@ -49,7 +49,10 @@ const Login: React.FC<LoginProps> = ({history}) => {
       });
     }
   };
-
+  useIonViewWillEnter(() => {
+    setUsername("Jean");
+    setPassword("123");
+  })
   return (
     <IonPage id="login-page">
       <IonHeader>
@@ -81,7 +84,7 @@ const Login: React.FC<LoginProps> = ({history}) => {
           <IonList>
             <IonItem>
               <IonLabel position="stacked" color="primary">Username</IonLabel>
-              <IonInput name="username" type="text" value="Jean" spellCheck={false} autocapitalize="off" onIonChange={e => setUsername(e.detail.value!)}
+              <IonInput name="username" type="text" value={username} spellCheck={false} autocapitalize="off" onIonChange={e => setUsername(e.detail.value!)}
                 required>
               </IonInput>
             </IonItem>
@@ -94,7 +97,7 @@ const Login: React.FC<LoginProps> = ({history}) => {
 
             <IonItem>
               <IonLabel position="stacked" color="primary">Password</IonLabel>
-              <IonInput name="password" type="password" value="123" onIonChange={e => setPassword(e.detail.value!)}>
+              <IonInput name="password" type="password" value={password} onIonChange={e => setPassword(e.detail.value!)}>
               </IonInput>
             </IonItem>
 
