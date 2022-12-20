@@ -5,7 +5,7 @@ import { User } from '../models/User';
 import axios from 'axios';
 
 // data urls
-const host = "http://localhost:8080/"
+const host = "gestionflotte-production.up.railway.app"
 const vehiclesUrl = host + "vehicles";
 const loginUrl = host + "login";
 
